@@ -1,0 +1,27 @@
+{
+  "name": "tywin-api",
+  "version": "0.0.1",
+  "description": "API for the Tywin App. The App to always pay your debts",
+  "main": "index.js",
+  "repository": "https://github.com/eabait/tywin-api",
+  "author": "eabait",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "fastify start index.js",
+    "test": "tap test/*.test.js test/*/*.test.js test/*/*/*.test.js",
+    "dev": "fastify start -l info -P index.js"
+  },
+  "dependencies": {
+    "fastify": "^1.2.1",
+    "fastify-autoload": "^0.3.0",
+    "fastify-cli": "^0.16.1",
+    "fastify-sequelize": "^1.0.4",
+    "make-promises-safe": "^1.1.0",
+    "mysql2": "^1.5.3",
+    "sequelize": "^4.37.10"
+  },
+  "devDependencies": {
+    "tap": "^11.1.3"
+  }
+}
