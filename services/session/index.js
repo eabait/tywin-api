@@ -1,7 +1,9 @@
+'use strict';
+
 const fsequelize = require('fastify-sequelize');
 const Sequelize = require('sequelize');
 
-async function routes (fastify, options) {
+async function routes(fastify, options) {
   fastify.register(fsequelize, {
     instance: 'database',
     host: 'localhost',
@@ -15,27 +17,27 @@ async function routes (fastify, options) {
       idle: 10000
     }
   })
-  .ready(() => {
-    fastify
-      .database
-      .authenticate()
-      .then(() => {
-        console.log('Connection has been established successfully.');
-      })
-      .catch(err => {
-        console.error('Unable to connect to the database:', err);
-      });
-  })
+    .ready(() => {
+      fastify
+        .database
+        .authenticate()
+        .then(() => {
+          console.log('Connection has been established successfully.');
+        })
+        .catch(err => {
+          console.error('Unable to connect to the database:', err);
+        });
+    });
 
-  fastify.post('/session', async (request, reply) => {
+  fastify.post('/session', async(request, reply) => {
     reply
       .send({
         new: 'session'
       });
   });
 
-  fastify.delete('/session', async function (req, reply) {
-    reply.send({})
+  fastify.delete('/session', async function(req, reply) {
+    reply.send({});
   });
 }
 

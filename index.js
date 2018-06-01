@@ -1,10 +1,10 @@
 'use strict';
 
 require('make-promises-safe');
-const path = require('path')
-const AutoLoad = require('fastify-autoload')
+const path = require('path');
+const AutoLoad = require('fastify-autoload');
 
-module.exports = function (fastify, opts, next) {
+module.exports = function(fastify, opts, next) {
   // Place here your custom code!
 
   // Do not touch the following lines
@@ -14,14 +14,14 @@ module.exports = function (fastify, opts, next) {
   // through your application
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'plugins')
-  })
+  });
 
   // This loads all plugins defined in services
   // define your routes in one of these
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'services')
-  })
+  });
 
   // Make sure to call next when done
-  next()
-}
+  next();
+};

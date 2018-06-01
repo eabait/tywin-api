@@ -1,0 +1,12 @@
+{
+  "extends": "strongloop",
+  "env": {
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
+  "rules": {
+    "comma-dangle": ["error", "never"]
+  }
+}

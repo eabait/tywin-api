@@ -1,2 +1,22 @@
 # tywin-api
-API for the Tywin App. The App to always pay your debts.
+Project boileplate for scalable NodeJS apps.
+
+### Tasks
+Remaining tasks
+
+[ ] Project setup
+  [x] Basic Fastlify project structure
+  [x] Database connection
+  [x] Lint
+  [ ] Config using env
+  [ ] Prettier
+  [ ] Docker and docker-compose
+  [x] Working unit tests
+  [ ] Coverage rules
+
+[ ] Session services
+  [ ] Login
+  [ ] Logout
+  [ ] Register
+  [ ] Forget password
+  [ ] Refresh session
