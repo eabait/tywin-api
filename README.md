@@ -13,6 +13,7 @@ Remaining tasks
   [ ] Docker and docker-compose
   [x] Working unit tests
   [ ] Coverage rules
+  [ ] Helmet plugin
 
 [ ] Session services
   [ ] Login

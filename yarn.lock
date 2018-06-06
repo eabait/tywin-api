@@ -601,7 +601,7 @@ fastify-plugin@^0.1.1:
   dependencies:
     semver "^5.3.0"
 
-fastify-plugin@^1.0.0:
+fastify-plugin@^1.0.0, fastify-plugin@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/fastify-plugin/-/fastify-plugin-1.0.1.tgz#4bd94d6f27cddf59fd43e188d6eedb1168ffc35d"
   dependencies:

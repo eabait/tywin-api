@@ -1,12 +1,19 @@
 'use strict';
 
-const fsequelize = require('fastify-sequelize');
+const fp = require('fastify-plugin');
 const Sequelize = require('sequelize');
+const {
+  create: createSessionSchema
+} = require('./schemas');
+const {
+  definition
+} = require('./model');
 
 async function routes(fastify, options) {
-  fastify.register(fsequelize, {
+  fastify.register(require('fastify-sequelize'), {
     instance: 'database',
     host: 'localhost',
+    database: 'tywin',
     username: 'root',
     password: 'cvY7NoQqTj2jg',
     dialect: 'mysql',
@@ -29,10 +36,25 @@ async function routes(fastify, options) {
         });
     });
 
-  fastify.post('/session', async(request, reply) => {
-    reply
-      .send({
-        new: 'session'
+  fastify.register(fp(async function decorateWithSessionModel(fastify, opts) {
+    const session = definition(fastify.database);
+    session.sync();
+    fastify.decorate('sessionModel', session);
+  }));
+
+  fastify.post('/session', createSessionSchema, async(request, reply) => {
+    // const {
+    //   email,
+    //   password
+    // } = request.body;
+    fastify.sessionModel.create({
+      accessToken: '1',
+      refreshToken: '2',
+      accessTokenTtl: new Date(),
+      refreshTokenTtl: new Date()
+    })
+      .then(session => {
+        reply.send(session);
       });
   });
 
