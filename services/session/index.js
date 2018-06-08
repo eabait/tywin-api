@@ -9,39 +9,58 @@ const {
   definition
 } = require('./model');
 
-async function routes(fastify, options) {
-  fastify.register(require('fastify-sequelize'), {
-    instance: 'database',
-    host: 'localhost',
-    database: 'tywin',
-    username: 'root',
-    password: 'cvY7NoQqTj2jg',
-    dialect: 'mysql',
-    operatorsAliases: Sequelize.Op, // use Sequelize.Op
-    pool: {
-      max: 5,
-      min: 0,
-      idle: 10000
+module.exports = async function(fastify, options) {
+
+  fastify.register(require('fastify-env'), {
+    schema: {
+      ...require('../../config/database.schema')
+    },
+    dotenv: {
+      path: `${__dirname}/.env`
     }
-  })
-    .ready(() => {
-      fastify
-        .database
-        .authenticate()
-        .then(() => {
-          console.log('Connection has been established successfully.');
-        })
-        .catch(err => {
-          console.error('Unable to connect to the database:', err);
-        });
-    });
+  });
 
-  fastify.register(fp(async function decorateWithSessionModel(fastify, opts) {
-    const session = definition(fastify.database);
-    session.sync();
-    fastify.decorate('sessionModel', session);
-  }));
+  fastify.register(async function(fastify, opts) {
 
+    console.log(fastify.config);
+
+    fastify.register(require('fastify-sequelize'), {
+      instance: 'database',
+      host: fastify.config.DATABASE_HOST,
+      database: fastify.config.DATABASE,
+      username: fastify.config.DATABASE_USER,
+      password: fastify.config.DATABASE_PASSWORD,
+      dialect: fastify.config.DATABASE_DIALECT,
+      operatorsAliases: Sequelize.Op,
+      pool: {
+        max: fastify.config.DATABASE_POOL_MAX,
+        min: fastify.config.DATABASE_POOL_MIN,
+        idle: fastify.config.DATABASE_POOL_IDLE
+      }
+    })
+      .ready(() => {
+        fastify
+          .database
+          .authenticate()
+          .then(() => {
+            console.log('Connection has been established successfully.');
+          })
+          .catch(err => {
+            console.error('Unable to connect to the database:', err);
+          });
+      });
+
+    fastify.register(fp(async function decorateWithSessionModel(fastify, opts) {
+      const session = definition(fastify.database);
+      session.sync();
+      fastify.decorate('sessionModel', session);
+    }));
+
+    fastify.register(registerRoutes);
+  });
+};
+
+async function registerRoutes(fastify, options) {
   fastify.post('/session', createSessionSchema, async(request, reply) => {
     // const {
     //   email,
@@ -62,5 +81,3 @@ async function routes(fastify, options) {
     reply.send({});
   });
 }
-
-module.exports = routes;
