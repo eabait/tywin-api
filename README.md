@@ -14,6 +14,7 @@ Remaining tasks
   - [x] Working unit tests
   - [ ] Coverage rules
   - [ ] Helmet plugin
+  - [ ] Run Sequelize migrations
 
 - [ ] Session services
   - [ ] Login

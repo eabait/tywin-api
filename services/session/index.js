@@ -1,7 +1,6 @@
 'use strict';
 
 const fp = require('fastify-plugin');
-const Sequelize = require('sequelize');
 const {
   create: createSessionSchema
 } = require('./schemas');
@@ -20,43 +19,21 @@ module.exports = async function(fastify, options) {
     }
   });
 
-  fastify.register(async function(fastify, opts) {
+  fastify.register(async function(fastify) {
 
-    console.log(fastify.config);
+    fastify.register(
+      require('../../plugins/databaseConnection'),
+      fastify.config
+    );
 
-    fastify.register(require('fastify-sequelize'), {
-      instance: 'database',
-      host: fastify.config.DATABASE_HOST,
-      database: fastify.config.DATABASE,
-      username: fastify.config.DATABASE_USER,
-      password: fastify.config.DATABASE_PASSWORD,
-      dialect: fastify.config.DATABASE_DIALECT,
-      operatorsAliases: Sequelize.Op,
-      pool: {
-        max: fastify.config.DATABASE_POOL_MAX,
-        min: fastify.config.DATABASE_POOL_MIN,
-        idle: fastify.config.DATABASE_POOL_IDLE
-      }
-    })
-      .ready(() => {
-        fastify
-          .database
-          .authenticate()
-          .then(() => {
-            console.log('Connection has been established successfully.');
-          })
-          .catch(err => {
-            console.error('Unable to connect to the database:', err);
-          });
-      });
-
-    fastify.register(fp(async function decorateWithSessionModel(fastify, opts) {
+    fastify.register(fp(async function decorateWithSessionModel(fastify) {
       const session = definition(fastify.database);
       session.sync();
       fastify.decorate('sessionModel', session);
     }));
 
     fastify.register(registerRoutes);
+
   });
 };
 
