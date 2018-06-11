@@ -54,7 +54,10 @@ async function registerRoutes(fastify, options) {
       });
   });
 
-  fastify.delete('/session', async function(req, reply) {
-    reply.send({});
+  fastify.get('/session', async function(req, reply) {
+    fastify.sessionModel.findAll()
+      .then(sessions => {
+        reply.send(sessions);
+      });
   });
 }
