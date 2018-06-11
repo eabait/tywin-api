@@ -8,12 +8,12 @@ Remaining tasks
   - [x] Basic Fastlify project structure
   - [x] Database connection
   - [x] Lint
-  - [ ] Config using env
+  - [x] Config using env
   - [ ] Prettier
   - [ ] Docker and docker-compose
   - [x] Working unit tests
   - [ ] Coverage rules
-  - [ ] Helmet plugin
+  - [x] Helmet plugin
   - [ ] Run Sequelize migrations
 
 - [ ] Session services
