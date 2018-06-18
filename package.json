@@ -2,17 +2,17 @@
   "name": "tywin-api",
   "version": "0.0.1",
   "description": "API for the Tywin App. The App to always pay your debts",
-  "main": "index.js",
+  "main": "server.js",
   "repository": "https://github.com/eabait/tywin-api",
   "author": "eabait",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "fastify start index.js",
+    "start": "fastify start server.js",
     "lint": "eslint --ignore-path .gitignore .",
     "unit": "mocha tests/**/*.test.js",
     "test": "yarn run lint && yarn run unit",
-    "dev": "fastify start -l info -P index.js"
+    "dev": "fastify start -l info -P server.js"
   },
   "dependencies": {
     "fastify": "^1.2.1",
@@ -25,7 +25,8 @@
     "make-promises-safe": "^1.1.0",
     "mocha": "^5.2.0",
     "mysql2": "^1.5.3",
-    "sequelize": "^4.37.10"
+    "sequelize": "^4.37.10",
+    "structure": "^1.3.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1",

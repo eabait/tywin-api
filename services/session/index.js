@@ -4,58 +4,54 @@ const fp = require('fastify-plugin');
 const {
   create: createSessionSchema
 } = require('./schemas');
-const {
-  definition
-} = require('./model');
+const SessionModel = require('./data/model');
+const SessionEntity = require('./entities/session');
+const UserModel = require('../users/data/model');
+const SessionSequelizeRepository = require('./data/sequelizeRepository');
+const UserRepository = require('../users/data/sequelizeRepository');
 
 module.exports = async function(fastify, options) {
 
-  fastify.register(require('fastify-env'), {
-    schema: {
-      ...require('../../config/database.schema')
-    },
-    dotenv: {
-      path: `${__dirname}/.env`
-    }
-  });
-
-  fastify.register(async function(fastify) {
-
-    fastify.register(
-      require('../../plugins/databaseConnection'),
-      fastify.config
+  fastify.register(fp(async function setupRepositories(fastify) {
+    const session = SessionModel(fastify.database);
+    const user = UserModel(fastify.database, session);
+    const userRepository = new UserRepository(user);
+    const sessionSequelizeRepository =
+      new SessionSequelizeRepository(session, userRepository);
+    fastify.decorate(
+      'sessionSequelizeRepository',
+      sessionSequelizeRepository
     );
+  }));
 
-    fastify.register(fp(async function decorateWithSessionModel(fastify) {
-      const session = definition(fastify.database);
-      session.sync();
-      fastify.decorate('sessionModel', session);
-    }));
+  fastify.register(registerRoutes);
 
-    fastify.register(registerRoutes);
-
-  });
 };
 
 async function registerRoutes(fastify, options) {
   fastify.post('/session', createSessionSchema, async(request, reply) => {
+    const repository = fastify.sessionSequelizeRepository;
     // const {
     //   email,
     //   password
     // } = request.body;
-    fastify.sessionModel.create({
-      accessToken: '1',
-      refreshToken: '2',
+    const session = new SessionEntity({
+      accessToken: 2,
       accessTokenTtl: new Date(),
+      refreshToken: 3,
       refreshTokenTtl: new Date()
-    })
-      .then(session => {
-        reply.send(session);
+    });
+    repository
+      .create(session)
+      .then(newSession => {
+        reply.send(newSession);
       });
   });
 
   fastify.get('/session', async function(req, reply) {
-    fastify.sessionModel.findAll()
+    const repository = fastify.sessionSequelizeRepository;
+    repository
+      .findAll()
       .then(sessions => {
         reply.send(sessions);
       });
