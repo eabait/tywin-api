@@ -7,17 +7,25 @@ const {
 const SessionModel = require('./data/model');
 const SessionEntity = require('./entities/session');
 const UserModel = require('../users/data/model');
+
 const SessionSequelizeRepository = require('./data/sequelizeRepository');
+const SessionMapper = require('./data/mapper');
+
 const UserRepository = require('../users/data/sequelizeRepository');
+const UserMapper = require('../users/data/mapper');
+const { mapValidationErrors } = require('../../exceptions/errorFactory');
 
 module.exports = async function(fastify, options) {
 
   fastify.register(fp(async function setupRepositories(fastify) {
     const session = SessionModel(fastify.database);
     const user = UserModel(fastify.database, session);
-    const userRepository = new UserRepository(user);
-    const sessionSequelizeRepository =
-      new SessionSequelizeRepository(session, userRepository);
+    const userRepository = new UserRepository(
+      user, UserMapper, mapValidationErrors
+    );
+    const sessionSequelizeRepository = new SessionSequelizeRepository(
+      session, SessionMapper, mapValidationErrors, userRepository
+    );
     fastify.decorate(
       'sessionSequelizeRepository',
       sessionSequelizeRepository

@@ -1,6 +1,8 @@
 'use strict';
 
 const { attributes } = require('structure');
+const bcrypt = require('bcrypt');
+const { PASSWORD_SALT } = require('../../../config/index.js');
 
 const User = attributes({
   id: Number,
@@ -21,14 +23,23 @@ const User = attributes({
     type: String,
     required: true
   },
-  role: {
+  roles: {
     type: Array,
     itemType: String,
     default: ['USER']
   }
 })(class User {
-  fullname() {
-    return `${this.firstName} ${this.lastName}`;
+
+  static async getEncryptedPassword(plainPassword) {
+    const hashedPassword = await bcrypt.hash(
+      plainPassword,
+      PASSWORD_SALT
+    );
+    return hashedPassword;
+  }
+
+  async comparePasswords(plainTextPassword) {
+    return await bcrypt.compare(plainTextPassword, this.password);
   }
 });
 

@@ -1,11 +1,12 @@
 'use strict';
 
-const SessionMapper = require('./mapper');
-
 class SessionRepository {
 
-  constructor(sessionModel, userRepository) {
+  constructor(sessionModel, sessionMapper, mapValidationErrors,
+    userRepository) {
     this.sessionModel = sessionModel;
+    this.sessionMapper = sessionMapper;
+    this.mapValidationErrors = mapValidationErrors;
     this.userRepository = userRepository;
   }
 
@@ -13,22 +14,25 @@ class SessionRepository {
     const { valid, errors } = session.validate();
 
     if (!valid) {
-      const error = new Error('ValidationError');
-      error.details = errors;
-      throw error;
+      throw this.mapValidationErrors(errors);
     }
 
-    const newModel = await this.sessionModel.create(
-      SessionMapper.toDatabase(session)
-    );
+    let newModel = null;
+    try {
+      newModel = await this.sessionModel.create(
+        this.sessionMapper.toDatabase(session)
+      );
+    } catch (sequelizeError) {
+      throw this.mapValidationErrors(sequelizeError.errors);
+    }
 
-    return SessionMapper.toEntity(newModel);
+    return this.sessionMapper.toEntity(newModel);
   }
 
   async findAll() {
     return this.sessionModel
       .findAll()
-      .map(model => SessionMapper.toEntity(model));
+      .map(model => this.sessionMapper.toEntity(model));
   }
 
 }

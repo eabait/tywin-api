@@ -10,11 +10,13 @@
   "scripts": {
     "start": "fastify start server.js",
     "lint": "eslint --ignore-path .gitignore .",
-    "unit": "mocha tests/**/*.test.js",
+    "unit": "mocha tests/unit/**/*.test.js",
     "test": "yarn run lint && yarn run unit",
     "dev": "fastify start -l info -P server.js"
   },
   "dependencies": {
+    "bcrypt": "^2.0.1",
+    "chai": "^4.1.2",
     "fastify": "^1.2.1",
     "fastify-autoload": "^0.3.0",
     "fastify-cli": "^0.16.1",

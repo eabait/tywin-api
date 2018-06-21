@@ -28,7 +28,7 @@ module.exports = (database, SessionModel) => {
         unique: true,
         allowNull: false
       },
-      role: {
+      roles: {
         type: Sequelize.ENUM('ADMIN', 'USER'),
         allowNull: false
       }

@@ -11,7 +11,13 @@ const UserMapper = {
   },
 
   toDatabase(entity) {
-    return entity;
+    return {
+      firstName: entity.firstName,
+      lastName: entity.lastName,
+      email: entity.email,
+      password: entity.password,
+      roles: entity.roles
+    };
   }
 };
 
