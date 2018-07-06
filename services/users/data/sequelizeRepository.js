@@ -35,7 +35,7 @@ class UserRepository {
   }
 
   async findByEmail(email) {
-    const model = this.userModel.findOne({
+    const model = await this.userModel.findOne({
       where: {
         email
       }

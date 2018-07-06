@@ -4,14 +4,15 @@ require('make-promises-safe');
 const path = require('path');
 const AutoLoad = require('fastify-autoload');
 
-module.exports = function(fastify, opts, next) {
+module.exports = function(fastify, options, next) {
 
+  const envPath = options.envPath;
   fastify.register(require('fastify-env'), {
     schema: {
       ...require('./config/database.schema')
     },
     dotenv: {
-      path: `${__dirname}/.env`
+      path: envPath || `${__dirname}/.env`
     }
   });
 
@@ -26,7 +27,16 @@ module.exports = function(fastify, opts, next) {
     });
 
     fastify.register(async function(fastify) {
-      fastify.database.sync();
+      fastify
+        .database
+        .authenticate()
+        .then(() => {
+          fastify.logger.info('Successful database connection.');
+          fastify.database.sync();
+        })
+        .catch(error => {
+          fastify.logger.error('Cannot connect to database', error);
+        });
     });
 
   });

@@ -2,12 +2,11 @@
 
 class SessionRepository {
 
-  constructor(sessionModel, sessionMapper, mapValidationErrors,
-    userRepository) {
+  constructor(sessionModel, sessionMapper, mapValidationErrors, userModel) {
     this.sessionModel = sessionModel;
     this.sessionMapper = sessionMapper;
     this.mapValidationErrors = mapValidationErrors;
-    this.userRepository = userRepository;
+    this.userModel = userModel;
   }
 
   async create(session) {
@@ -31,7 +30,7 @@ class SessionRepository {
 
   async findAll() {
     return this.sessionModel
-      .findAll()
+      .findAll({include: [ this.userModel ]})
       .map(model => this.sessionMapper.toEntity(model));
   }
 

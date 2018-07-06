@@ -15,7 +15,8 @@ const SessionMapper = {
       accessToken: entity.accessToken,
       accessTokenTtl: entity.accessTokenTtl,
       refreshToken: entity.refreshToken,
-      refreshTokenTtl: entity.refreshTokenTtl
+      refreshTokenTtl: entity.refreshTokenTtl,
+      user_id: entity.user.id
     };
   }
 };

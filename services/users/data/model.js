@@ -2,7 +2,7 @@
 
 const Sequelize = require('sequelize');
 
-module.exports = (database, SessionModel) => {
+module.exports = (database) => {
   const UserModel = database.define(
     'user',
     {
@@ -37,10 +37,6 @@ module.exports = (database, SessionModel) => {
       underscored: true
     }
   );
-
-  UserModel.hasMany(SessionModel, {
-    as: 'User'
-  });
 
   return UserModel;
 };

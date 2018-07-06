@@ -2,8 +2,8 @@
 
 const Sequelize = require('sequelize');
 
-module.exports = (database) => {
-  return database.define(
+module.exports = (database, userModel) => {
+  const sessionModel = database.define(
     'session',
     {
       id: {
@@ -20,5 +20,7 @@ module.exports = (database) => {
       underscored: true
     }
   );
+  sessionModel.belongsTo(userModel);
+  return sessionModel;
 };
 

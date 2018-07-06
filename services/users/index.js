@@ -4,7 +4,6 @@ const fp = require('fastify-plugin');
 const {
   create: createUserSchema
 } = require('./schemas');
-const SessionModel = require('../session/data/model');
 const UserEntity = require('./entities/user');
 const UserModel = require('../users/data/model');
 const UserSequelizeRepository = require('./data/sequelizeRepository');
@@ -14,8 +13,7 @@ const { mapValidationErrors } = require('../../exceptions/errorFactory');
 module.exports = async function(fastify, options) {
 
   fastify.register(fp(async function setupRepositories(fastify) {
-    const session = SessionModel(fastify.database);
-    const user = UserModel(fastify.database, session);
+    const user = UserModel(fastify.database);
     const userSequelizeRepository = new UserSequelizeRepository(
       user, UserMapper, mapValidationErrors
     );
@@ -36,16 +34,14 @@ async function registerRoutes(fastify, options) {
       firstName,
       lastName,
       email,
-      password,
-      roles
+      password
     } = request.body;
     const hashedPassword = await UserEntity.getEncryptedPassword(password);
     const user = new UserEntity({
       firstName,
       lastName,
       email,
-      password: hashedPassword,
-      roles
+      password: hashedPassword
     });
     try {
       const newUser = await repository.create(user);

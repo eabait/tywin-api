@@ -1,34 +1,45 @@
 /* eslint-env node, mocha */
 'use strict';
 
-const assert = require('assert');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
 const Fastify = require('fastify');
-const fp = require('fastify-plugin');
 const UsersService = require('../../../services/users');
+const TestDatabaseConnectionPlugin =
+  require('../../plugins/databaseTestConnection');
 
-let fastify;
+const { expect } = chai;
+chai.use(chaiHttp);
 
 describe('Users', () => {
 
-  before('create fastify instance', (done) => {
-    fastify = Fastify({ level: 'silent' });
-    fastify.register(fp(UsersService));
-    fastify.ready(done);
+  let fastify;
+
+  before('Bootstrap User service', (done) => {
+    fastify = Fastify({ level: 'info' });
+    fastify
+      .register(TestDatabaseConnectionPlugin)
+      .register(UsersService)
+      .ready(done);
   });
 
-  after('destroy fastify', done => {
+  after('Destroy User service', done => {
     if (!fastify) return done();
-    fastify.close(done);
+    fastify.close(() => {
+      done();
+    });
   });
 
-  it('Response is successful', () => {
-    fastify.inject({
-      method: 'GET',
-      url: '/users'
-    }, (err, response) => {
-      assert.ifError(err);
-      assert.equal(200, response.statusCode);
-      assert.equal('{"hello":"world"}', response.payload);
-    });
+  it('sends a valid JSON response', done => {
+    chai
+      .request(fastify.server)
+      .get('/users')
+      .end((error, response) => {
+        expect(error).to.be.null;
+        expect(response).to.have.status(200);
+        expect(response).to.have.header('content-type', /application\/json/);
+        expect(response).to.be.json;
+        done();
+      });
   });
 });

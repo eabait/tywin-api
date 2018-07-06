@@ -18,18 +18,7 @@ module.exports = fp(function(fastify, options, next) {
       min: fastify.config.DATABASE_POOL_MIN,
       idle: fastify.config.DATABASE_POOL_IDLE
     }
-  })
-    .ready(() => {
-      fastify
-        .database
-        .authenticate()
-        .then(() => {
-          console.log('Connection has been established successfully.');
-        })
-        .catch(error => {
-          console.log('Cannot connect to database', error);
-        });
-    });
+  });
 
   next();
 });
