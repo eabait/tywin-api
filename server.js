@@ -6,7 +6,8 @@ const AutoLoad = require('fastify-autoload');
 
 module.exports = function(fastify, options, next) {
 
-  const envPath = options.envPath;
+  const { envPath } = options;
+
   fastify.register(require('fastify-env'), {
     schema: {
       ...require('./config/database.schema')
@@ -26,16 +27,18 @@ module.exports = function(fastify, options, next) {
       dir: path.join(__dirname, 'services')
     });
 
-    fastify.register(async function(fastify) {
+    fastify.register(function(fastify, options, next) {
       fastify
         .database
         .authenticate()
         .then(() => {
-          fastify.logger.info('Successful database connection.');
+          fastify.logger.info(`Successfuly connected to ${fastify.config.DATABASE}`);
           fastify.database.sync();
+          next();
         })
         .catch(error => {
           fastify.logger.error('Cannot connect to database', error);
+          next();
         });
     });
 

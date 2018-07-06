@@ -4,9 +4,8 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const Fastify = require('fastify');
-const UsersService = require('../../../services/users');
-const TestDatabaseConnectionPlugin =
-  require('../../plugins/databaseTestConnection');
+const fp = require('fastify-plugin');
+const App = require('../../../server');
 
 const { expect } = chai;
 chai.use(chaiHttp);
@@ -18,8 +17,9 @@ describe('Users', () => {
   before('Bootstrap User service', (done) => {
     fastify = Fastify({ level: 'info' });
     fastify
-      .register(TestDatabaseConnectionPlugin)
-      .register(UsersService)
+      .register(fp(App), {
+        envPath: `${__dirname}/../../.env`
+      })
       .ready(done);
   });
 
