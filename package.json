@@ -12,7 +12,7 @@
     "lint": "eslint --ignore-path .gitignore .",
     "unit": "mocha tests/unit/**/*.test.js",
     "integration": "mocha tests/integration/**/*.test.js",
-    "test": "yarn run lint && yarn run unit",
+    "test": "yarn run lint && yarn run unit && yarn run integration",
     "dev": "fastify start -l info -P server.js"
   },
   "dependencies": {

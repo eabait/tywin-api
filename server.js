@@ -32,9 +32,16 @@ module.exports = function(fastify, options, next) {
         .database
         .authenticate()
         .then(() => {
-          fastify.logger.info(`Successfuly connected to ${fastify.config.DATABASE}`);
-          fastify.database.sync();
-          next();
+          fastify.logger.debug(
+            `Successfuly connected to ${fastify.config.DATABASE}`
+          );
+          fastify
+            .database
+            .sync()
+            .then(() => {
+              next();
+            });
+
         })
         .catch(error => {
           fastify.logger.error('Cannot connect to database', error);
