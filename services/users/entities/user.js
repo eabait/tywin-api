@@ -23,10 +23,9 @@ const User = attributes({
     type: String,
     required: true
   },
-  roles: {
-    type: Array,
-    itemType: String,
-    default: ['USER']
+  role: {
+    type: String,
+    default: 'USER'
   }
 })(class User {
 

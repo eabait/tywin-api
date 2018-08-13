@@ -8,6 +8,12 @@ module.exports = function(fastify, options, next) {
 
   const { envPath } = options;
 
+  fastify.setErrorHandler((error, request, reply) => {
+    reply.send({
+      errors: error.details
+    });
+  });
+
   fastify.register(require('fastify-env'), {
     schema: {
       ...require('./config/database.schema')
@@ -43,14 +49,12 @@ module.exports = function(fastify, options, next) {
       );
       try {
         await fastify.database.sync();
-        next();
       } catch (error) {
         fastify.logger.error(
           'There has been an error synching the database',
           fastify.config.DATABASE,
           error
         );
-        next();
       };
     });
 

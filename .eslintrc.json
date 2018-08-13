@@ -11,5 +11,8 @@
   },
   "rules": {
     "comma-dangle": ["error", "never"]
+  },
+  "globals": {
+    "Promise": true
   }
 }
