@@ -41,12 +41,10 @@ describe('Users', () => {
   });
 
   beforeEach(async() => {
-    console.log('******** BEFOREEACH');
     await userSeeder.createSeeds();
   });
 
   afterEach(async() => {
-    console.log('******** AFTEREACH');
     await userSeeder.destroySeeds();
   });
 

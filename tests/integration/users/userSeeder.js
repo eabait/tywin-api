@@ -30,8 +30,7 @@ class UserSeeder {
 
   async destroySeeds() {
     try {
-      const result = await this.database.query('DELETE FROM users');
-      return result;
+      return await this.database.query('DELETE FROM users');
     } catch (error) {
       console.log(error);
     }
