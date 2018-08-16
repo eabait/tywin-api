@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('assert');
+const ValidationError = require('./validationError');
 
 module.exports = {
 
@@ -10,7 +11,7 @@ module.exports = {
    * @returns {Error} an error object
    */
   mapValidationErrors(validationErrors) {
-    const error = new Error('ValidationError');
+    const error = new ValidationError();
 
     assert(
       validationErrors != null && Array.isArray(validationErrors),
@@ -22,9 +23,11 @@ module.exports = {
       return {
         message: errorItem.message,
         value: errorItem.value,
-        path: errorItem.path
+        path: errorItem.path,
+        code: errorItem.validatorKey || errorItem.code || null
       };
     });
+    error.status = 400;
     return error;
   }
 

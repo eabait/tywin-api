@@ -19,9 +19,23 @@ Remaining tasks
   - [x] Helmet plugin
   - [x] Run Sequelize migrations
 
+### Modules
+The following modules will be implemented. Each module represents (or tries to) a bounded context.
+
 - [ ] Session services
   - [ ] Login
   - [ ] Logout
   - [ ] Register
   - [ ] Forget password
   - [ ] Refresh session
+
+- [ ] User services
+  - [ ] Create
+  - [ ] List
+  - [ ] Update
+  - [ ] Delete
+  - [ ] Detail
+
+### Design Decisions
+* Authentication with JWT
+* Role-based Authorization
