@@ -15,8 +15,7 @@ const UserMapper = {
       firstName: entity.firstName,
       lastName: entity.lastName,
       email: entity.email,
-      password: entity.password,
-      role: entity.role
+      password: entity.password
     };
   }
 };

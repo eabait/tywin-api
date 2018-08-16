@@ -18,12 +18,12 @@ module.exports = function(fastify, options, next) {
         password,
         role
       } = request.body;
-      const hashedPassword = await UserEntity.getEncryptedPassword(password);
+
       const user = new UserEntity({
         firstName,
         lastName,
         email,
-        password: hashedPassword,
+        password: password,
         role
       });
       try {

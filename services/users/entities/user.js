@@ -22,16 +22,12 @@ const User = attributes({
   password: {
     type: String,
     required: true
-  },
-  role: {
-    type: String,
-    default: 'USER'
   }
 })(class User {
 
-  static async getEncryptedPassword(plainPassword) {
+  async getEncryptedPassword() {
     const hashedPassword = await bcrypt.hash(
-      plainPassword,
+      this.password,
       PASSWORD_SALT
     );
     return hashedPassword;

@@ -14,9 +14,9 @@ class UserRepository {
     if (!valid) {
       throw this.mapValidationErrors(errors);
     }
+    user.password = await user.getEncryptedPassword();
 
     let newModel = null;
-
     try {
       newModel = await this.userModel.create(
         this.userMapper.toDatabase(user)

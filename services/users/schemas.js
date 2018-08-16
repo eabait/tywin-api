@@ -21,10 +21,6 @@ const create = {
         type: 'string',
         minLength: 8,
         required: true
-      },
-      roles: {
-        type: 'array',
-        required: true
       }
     }
   }

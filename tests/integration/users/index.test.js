@@ -7,7 +7,7 @@ const faker = require('faker');
 const Fastify = require('fastify');
 const fp = require('fastify-plugin');
 const App = require('../../../server');
-const UserSeeder = require('./userSeeder');
+const UserSeeder = require('./helpers/userSeeder');
 
 const { expect } = chai;
 chai.use(chaiHttp);
@@ -61,13 +61,23 @@ describe('Users', () => {
       .catch(error => expect(error).to.be.null);
   });
 
+  it('lists the correct number of users', done => {
+    chai
+      .request(fastify.server)
+      .get('/users')
+      .then(response => {
+        expect(response.body).to.have.length(3);
+        done();
+      })
+      .catch(error => expect(error).to.be.null);
+  });
+
   it('creates a user', done => {
     const newUser = {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
-      password: faker.internet.password(),
-      role: 'ADMIN'
+      password: faker.internet.password()
     };
     chai
       .request(fastify.server)
@@ -86,5 +96,22 @@ describe('Users', () => {
         done();
       })
       .catch(error => expect(error).to.be.null);
+  });
+
+  it('returns detailed errors if validation fails', done => {
+    const newUser = {
+      firstName: ''
+    };
+    chai
+      .request(fastify.server)
+      .post('/users')
+      .send(newUser)
+      .then(response => {
+        expect(response).to.have.status(400);
+        done();
+      })
+      .catch(error => {
+        throw error;
+      });
   });
 });
