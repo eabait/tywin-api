@@ -6,15 +6,14 @@ const create = {
     properties: {
       email: {
         type: 'string',
-        format: 'email',
-        required: true
+        format: 'email'
       },
       password: {
         type: 'string',
-        minLength: 8,
-        required: true
+        minLength: 8
       }
-    }
+    },
+    required: ['email', 'password']
   }
 };
 

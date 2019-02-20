@@ -6,7 +6,7 @@ const chaiHttp = require('chai-http');
 const faker = require('faker');
 const Fastify = require('fastify');
 const fp = require('fastify-plugin');
-const App = require('../../../server');
+const App = require('../../../src/server');
 const UserSeeder = require('./helpers/userSeeder');
 
 const { expect } = chai;
@@ -52,6 +52,7 @@ describe('Users', () => {
     chai
       .request(fastify.server)
       .get('/users')
+      .set('Accept', 'application/json')
       .then(response => {
         expect(response).to.have.status(200);
         expect(response).to.have.header('content-type', /application\/json/);
@@ -65,6 +66,7 @@ describe('Users', () => {
     chai
       .request(fastify.server)
       .get('/users')
+      .set('Accept', 'application/json')
       .then(response => {
         expect(response.body).to.have.length(3);
         done();

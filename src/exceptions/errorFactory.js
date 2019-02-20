@@ -23,11 +23,22 @@ module.exports = {
       return {
         message: errorItem.message,
         value: errorItem.value,
-        path: errorItem.path,
-        code: errorItem.validatorKey || errorItem.code || null
+        path: errorItem.path
       };
     });
     error.status = 400;
+    return error;
+  },
+
+  mapNotFoundError(message) {
+    const error = new ValidationError();
+
+    error.details = [{
+      message: message,
+      code: 'RegistryNotFound'
+    }];
+    error.status = 404;
+
     return error;
   }
 

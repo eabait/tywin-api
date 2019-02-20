@@ -2,7 +2,7 @@
 
 const fixture = require('./fixture');
 const Sequelize = require('sequelize');
-const User = require('../../../../services/users/data/model');
+const User = require('../../../../src/services/users/data/userSequelizeModel');
 
 class UserSeeder {
   constructor(config) {

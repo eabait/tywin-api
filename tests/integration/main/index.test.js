@@ -4,7 +4,7 @@
 const assert = require('assert');
 const Fastify = require('fastify');
 const fp = require('fastify-plugin');
-const MainService = require('../../../services/main');
+const MainService = require('../../../src/services/main');
 
 let fastify;
 

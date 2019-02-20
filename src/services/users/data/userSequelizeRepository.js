@@ -1,6 +1,6 @@
 'use strict';
 
-class UserRepository {
+class UserSequelizeRepository {
 
   constructor(userModel, userMapper, mapValidationErrors) {
     this.userModel = userModel;
@@ -45,4 +45,4 @@ class UserRepository {
 
 }
 
-module.exports = UserRepository;
+module.exports = UserSequelizeRepository;

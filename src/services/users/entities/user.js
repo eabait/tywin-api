@@ -1,8 +1,7 @@
 'use strict';
 
 const { attributes } = require('structure');
-const bcrypt = require('bcrypt');
-const { PASSWORD_SALT } = require('../../../config/index.js');
+const bcrypt = require('bcryptjs');
 
 const User = attributes({
   id: Number,
@@ -28,7 +27,7 @@ const User = attributes({
   async getEncryptedPassword() {
     const hashedPassword = await bcrypt.hash(
       this.password,
-      PASSWORD_SALT
+      10
     );
     return hashedPassword;
   }

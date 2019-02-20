@@ -3,30 +3,29 @@
 require('make-promises-safe');
 const path = require('path');
 const AutoLoad = require('fastify-autoload');
+const loadCommonServiceSchemas = require('./common/servicesSchemas');
 
 module.exports = function(fastify, options, next) {
 
   const { envPath } = options;
 
-  fastify.setErrorHandler((error, request, reply) => {
-    reply.send({
-      errors: error.details
-    });
-  });
+  fastify.use(require('cors')());
+
+  fastify.setErrorHandler(require('./exceptions/errorHandler'));
 
   fastify.register(require('fastify-env'), {
-    schema: {
-      ...require('./config/database.schema')
-    },
+    schema: require('./common/envSchemas'),
     dotenv: {
       path: envPath || `${__dirname}/.env`
     }
   });
 
+  loadCommonServiceSchemas(fastify);
+
   fastify.register(async function(fastify) {
 
     fastify.register(AutoLoad, {
-      dir: path.join(__dirname, 'plugins/autoloaded')
+      dir: path.join(__dirname, 'plugins')
     });
 
     fastify.register(AutoLoad, {
@@ -36,6 +35,9 @@ module.exports = function(fastify, options, next) {
     fastify.register(async function(fastify) {
       try {
         await fastify.database.authenticate();
+        fastify.logger.debug(
+          `Successfuly connected to ${fastify.config.DATABASE}`
+        );
       } catch (error) {
         fastify.logger.error(
           'Cannot connect to database',
@@ -44,9 +46,6 @@ module.exports = function(fastify, options, next) {
         );
         next();
       };
-      fastify.logger.debug(
-        `Successfuly connected to ${fastify.config.DATABASE}`
-      );
       try {
         await fastify.database.sync();
       } catch (error) {

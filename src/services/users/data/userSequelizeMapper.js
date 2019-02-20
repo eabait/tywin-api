@@ -5,9 +5,13 @@ const UserEntity = require('../entities/user');
 const UserMapper = {
 
   toEntity(sequelizeModel) {
-    return new UserEntity(sequelizeModel.get({
-      plain: true
-    }));
+    if (sequelizeModel != null) {
+      return new UserEntity(sequelizeModel.get({
+        plain: true
+      }));
+    } else {
+      return null;
+    }
   },
 
   toDatabase(entity) {

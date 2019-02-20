@@ -10,7 +10,9 @@ module.exports = {
     'DATABASE_PASSWORD',
     'DATABASE_POOL_MIN',
     'DATABASE_POOL_MAX',
-    'DATABASE_POOL_IDLE'
+    'DATABASE_POOL_IDLE',
+    'JWT_SECRET',
+    'JWT_EXPIRY_TIME'
   ],
   properties: {
     DATABASE_DIALECT: { type: 'string', default: 'mysql' },
@@ -20,6 +22,8 @@ module.exports = {
     DATABASE_PASSWORD: { type: 'string', default: 'changeme!' },
     DATABASE_POOL_MIN: { type: 'integer', default: '0' },
     DATABASE_POOL_MAX: { type: 'integer', default: '5' },
-    DATABASE_POOL_IDLE: { type: 'integer', default: '10000' }
+    DATABASE_POOL_IDLE: { type: 'integer', default: '10000' },
+    JWT_SECRET: { type: 'string' },
+    JWT_EXPIRY_TIME: { type: 'number' }
   }
 };

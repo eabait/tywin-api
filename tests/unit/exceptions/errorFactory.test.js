@@ -3,7 +3,7 @@
 
 const assert = require('assert');
 const { expect } = require('chai');
-const { mapValidationErrors } = require('../../../exceptions/errorFactory');
+const { mapValidationErrors } = require('../../../src/exceptions/errorFactory');
 
 describe('mapValidationErrors', () => {
 
